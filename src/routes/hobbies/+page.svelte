@@ -18,6 +18,26 @@
 
 <div class="container" style="padding-top:3rem; padding-bottom:5rem;">
 
+  <!-- ── QUICK LINKS ──────────────────────────────────── -->
+  <div class="quick-links">
+    <a href="/scripts" class="quick-link">
+      <span class="quick-link__icon" aria-hidden="true">✎</span>
+      <div class="quick-link__body">
+        <span class="quick-link__label pixel-stamp stamp--amber" style="font-size:6px;">THE WRITING ROOM</span>
+        <span class="quick-link__name">Scripts & Sketches</span>
+        <span class="quick-link__desc mono">sketches, bits &amp; premises</span>
+      </div>
+    </a>
+    <a href="/dnd" class="quick-link">
+      <span class="quick-link__icon" aria-hidden="true">🎲</span>
+      <div class="quick-link__body">
+        <span class="quick-link__label pixel-stamp stamp--red" style="font-size:6px;">THE PARTY</span>
+        <span class="quick-link__name">D&D Characters</span>
+        <span class="quick-link__desc mono">everyone i've played</span>
+      </div>
+    </a>
+  </div>
+
   <!-- ── ACTIVE ───────────────────────────────────────── -->
   <header class="page-header">
     <div class="pixel-stamp stamp--amber" style="margin-bottom:1rem;">HOBBY BOARD</div>
@@ -163,6 +183,66 @@
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 2rem;
     margin-bottom: 4rem;
+  }
+
+  /* ── QUICK LINKS ─── */
+  .quick-links {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 3rem;
+  }
+
+  .quick-link {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.25rem 1.5rem;
+    background: var(--col-bench);
+    border: 2px solid var(--col-pixel-border);
+    text-decoration: none;
+    transition: border-color 0.15s, box-shadow 0.15s, transform 0.1s;
+    box-shadow: 3px 3px 0 rgba(0,0,0,0.4);
+  }
+
+  .quick-link:hover {
+    border-color: var(--col-neon);
+    box-shadow: 3px 3px 0 rgba(0,0,0,0.4), 0 0 12px rgba(0,255,136,0.15);
+    transform: translateY(-2px);
+  }
+
+  .quick-link:hover .quick-link__name {
+    color: var(--col-neon);
+    text-shadow: 0 0 8px rgba(0,255,136,0.4);
+  }
+
+  .quick-link__icon {
+    font-size: 2rem;
+    flex-shrink: 0;
+  }
+
+  .quick-link__body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .quick-link__label { margin-bottom: 0.1rem; }
+
+  .quick-link__name {
+    font-family: var(--font-pixel);
+    font-size: 9px;
+    color: var(--col-paper);
+    transition: color 0.15s, text-shadow 0.15s;
+  }
+
+  .quick-link__desc {
+    font-size: 15px;
+    color: var(--col-paper-dark);
+  }
+
+  @media (max-width: 500px) {
+    .quick-links { grid-template-columns: 1fr; }
   }
 
   .hobby-card {

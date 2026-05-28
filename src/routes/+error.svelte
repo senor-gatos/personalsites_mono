@@ -1,5 +1,7 @@
 <script lang="ts">
   import { page } from '$app/state';
+  const now = new Date();
+  const osVersion = `v${String(now.getFullYear()).slice(2)}.${now.getMonth() + 1}.${now.getDate()}`;
 </script>
 
 <svelte:head>
@@ -11,7 +13,7 @@
     <div class="monitor__screen">
       <div class="scanline" aria-hidden="true"></div>
 
-      <p class="label mono">WORKSHOP OS v2.4.1 — SYSTEM ALERT</p>
+      <p class="label mono">WORKSHOP OS {osVersion} — SYSTEM ALERT</p>
 
       <h1 class="code">{page.status}</h1>
 

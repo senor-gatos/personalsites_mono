@@ -96,6 +96,19 @@ Set `type: 'off'` to hide the widget entirely.
 
 Edit `src/routes/about/+page.svelte` directly. The bio text, interests list, and dossier fields are all plain HTML you can update inline.
 
+### Scripts & Sketches
+
+Edit `src/lib/data/scripts.ts`. Each entry has:
+- `type`: `'sketch' | 'script' | 'bit' | 'monologue' | 'premise'`
+- `status`: `'performed' | 'draft' | 'shelved' | 'in-progress'`
+- `logline`: one-line premise shown on the card
+- `content`: optional full text (shown in an expandable panel)
+- `link`: optional external link instead of inline content
+
+### D&D Characters
+
+Edit `src/lib/data/dndCharacters.ts`. Each character has name, race, class, level, campaign, status, backstory, and a `portrait` object with `skin`, `hair`, `outfit`, `accent` hex colors — these generate a unique pixel art portrait automatically.
+
 ### Social media links
 
 Links appear in two places — update both when you have your real handles:
