@@ -74,6 +74,14 @@ export const projects: Project[] = [
     year: 2026,
   },
   {
+    id: 'smarthome',
+    title: 'Local-Only Smart Home',
+    desc: 'Custom home automation stack — AC control & power monitoring over WiFi, temp/humidity over BLE, MQTT broker, and a task manager for orchestrating everything. No cloud. No subscriptions. No data leaving the house.',
+    status: 'in-progress',
+    tags: ['iot', 'mqtt', 'ble', 'wifi', 'home-automation', 'linux'],
+    year: 2026,
+  },
+  {
     id: 'homelab',
     title: 'Home Lab / Self-Hosted Stack',
     desc: 'A home server running Jellyfin, assorted self-hosted services, and whatever else seems like a good idea at 1am. Ongoing infrastructure project.',

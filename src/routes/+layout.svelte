@@ -4,6 +4,7 @@
   import { page } from '$app/state';
   import { onMount } from 'svelte';
   import EasterEggs from '$lib/components/EasterEggs.svelte';
+  import BookshelfCorner from '$lib/components/BookshelfCorner.svelte';
 
   let { children } = $props();
   let catDeg    = $state(0);
@@ -220,6 +221,10 @@
 </footer>
 
 <EasterEggs />
+
+{#if page.url.pathname !== '/'}
+  <BookshelfCorner />
+{/if}
 
 <style>
   .nav {

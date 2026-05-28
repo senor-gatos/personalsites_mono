@@ -2,6 +2,7 @@
   import { onMount } from 'svelte';
   import { collect } from '$lib/inventory';
   import NowPlaying from '$lib/components/NowPlaying.svelte';
+  import BasementScene from '$lib/components/BasementScene.svelte';
   import type { PageData } from './$types';
 
   let { data }: { data: PageData } = $props();
@@ -12,6 +13,36 @@
   let duckMessage = $state('');
   let showDuckMsg = $state(false);
   let duckTimer: ReturnType<typeof setTimeout>;
+
+  // Draggable duck
+  let duckX = $state<number | null>(null);
+  let duckY = $state<number | null>(null);
+  let dragging = $state(false);
+  let dragOffX = 0;
+  let dragOffY = 0;
+
+  function onDuckPointerDown(e: PointerEvent) {
+    e.preventDefault();
+    dragging = true;
+    const el = e.currentTarget as HTMLElement;
+    const rect = el.getBoundingClientRect();
+    dragOffX = e.clientX - rect.left;
+    dragOffY = e.clientY - rect.top;
+    el.setPointerCapture(e.pointerId);
+  }
+
+  function onDuckPointerMove(e: PointerEvent) {
+    if (!dragging) return;
+    duckX = e.clientX - dragOffX;
+    duckY = e.clientY - dragOffY;
+  }
+
+  function onDuckPointerUp(e: PointerEvent) {
+    if (!dragging) return;
+    dragging = false;
+    // only count as a click if it barely moved
+    if (duckX === null) clickDuck();
+  }
 
   const duckLines = [
     'quack.',
@@ -67,7 +98,9 @@
     },
   ];
 
-  // no fade-in needed
+  // OS version = vYY.M.D based on today's date — updates on each build/render
+  const now = new Date();
+  const osVersion = `v${String(now.getFullYear()).slice(2)}.${now.getMonth() + 1}.${now.getDate()}`;
 </script>
 
 <svelte:head>
@@ -77,44 +110,81 @@
 
 <div class="workbench">
 
-  <!-- Ambient workshop ceiling light glow -->
-  <div class="ceiling-light" aria-hidden="true"></div>
+  <!-- ── BASEMENT SCENE HERO ──────────────────────── -->
+  <header class="scene-hero" aria-label="Basement workshop">
 
-  <!-- ── HERO ─────────────────────────────────── -->
-  <header class="hero">
-    <div class="hero__monitor pixel-box pixel-box--crt">
-      <div class="monitor__screen">
-        <div class="monitor__scanline" aria-hidden="true"></div>
-        <p class="monitor__label mono">WORKSHOP OS v2.4.1</p>
-        <h1 class="monitor__title">
-          SENOR<br/>GATOS
-        </h1>
-        <p class="monitor__sub mono">
-          basement artificer &amp;<br />
-          way too distracted engineer<br />
-          <span class="blink">_</span>
-        </p>
-        <div class="monitor__status">
-          <span class="led"></span>
-          <span class="mono" style="font-size:16px">SYSTEMS NOMINAL</span>
-        </div>
-      </div>
-      <div class="monitor__base">
-        <span class="led" style="animation-delay:0s"></span>
-        <span class="led led--amber" style="animation-delay:0.5s"></span>
-        <span class="led" style="animation-delay:1s"></span>
-      </div>
+    <!-- Background: wall, shelves, clutter -->
+    <div class="scene-bg" aria-hidden="true">
+      <BasementScene />
     </div>
 
-    <NowPlaying />
+    <!-- Desk surface -->
+    <div class="scene-desk" aria-hidden="true">
+      <div class="scene-desk__top"></div>
+      <div class="scene-desk__face"></div>
+      <div class="scene-desk__legs"></div>
+    </div>
 
-    <!-- Rubber duck easter egg -->
-    <button class="duck" onclick={clickDuck} aria-label="A rubber duck. Click it." title="quack?">
+    <!-- Desk lamp glow overlay (positioned over left side of desk) -->
+    <div class="scene-lamp-glow" aria-hidden="true"></div>
+
+    <!-- Monitor on desk — centered, sits on desk surface -->
+    <div class="scene-monitor-area">
+      <div class="hero__monitor pixel-box pixel-box--crt">
+        <div class="monitor__screen">
+          <div class="monitor__scanline" aria-hidden="true"></div>
+          <p class="monitor__label mono">WORKSHOP OS {osVersion}</p>
+          <h1 class="monitor__title">
+            SENOR<br/>GATOS
+          </h1>
+          <p class="monitor__sub mono">
+            basement artificer &amp;<br />
+            way too distracted engineer<br />
+            <span class="blink">_</span>
+          </p>
+          <div class="monitor__status">
+            <span class="led"></span>
+            <span class="mono" style="font-size:16px">SYSTEMS NOMINAL</span>
+          </div>
+        </div>
+        <div class="monitor__base">
+          <span class="led" style="animation-delay:0s"></span>
+          <span class="led led--amber" style="animation-delay:0.5s"></span>
+          <span class="led" style="animation-delay:1s"></span>
+        </div>
+      </div>
+      <NowPlaying />
+    </div>
+
+    <!-- Floor -->
+    <div class="scene-floor" aria-hidden="true"></div>
+
+    <!-- Draggable rubber duck -->
+    <button
+      class="duck"
+      style="
+        position: {duckX !== null ? 'fixed' : 'absolute'};
+        {duckX !== null ? `left:${duckX}px; top:${duckY}px;` : 'bottom:96px; right:5%;'}
+        z-index: 100;
+        font-size: 44px;
+        margin: 0;
+        cursor: {dragging ? 'grabbing' : 'grab'};
+        touch-action: none;
+        user-select: none;
+      "
+      onclick={clickDuck}
+      onpointerdown={onDuckPointerDown}
+      onpointermove={onDuckPointerMove}
+      onpointerup={onDuckPointerUp}
+      aria-label="A rubber duck. Drag me around."
+      title="quack?"
+    >
       <span class="duck__body" aria-hidden="true">🦆</span>
       {#if showDuckMsg}
         <span class="duck__speech">{duckMessage}</span>
       {/if}
     </button>
+
   </header>
 
   <!-- ── WORKBENCH SURFACE ─────────────────────── -->
@@ -268,28 +338,124 @@
     gap: 0;
   }
 
-  /* Ceiling light glow — warm purple haze */
-  .ceiling-light {
-    position: fixed;
-    top: -80px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 600px;
-    height: 280px;
-    background: radial-gradient(ellipse at top, rgba(192,96,200,0.12) 0%, rgba(183,61,110,0.04) 50%, transparent 70%);
-    pointer-events: none;
-    z-index: 0;
+  /* ── SCENE HERO ──────────────────────────────── */
+  .scene-hero {
+    position: relative;
+    width: 100%;
+    height: calc(100vh - var(--nav-h));
+    overflow: hidden;
+    /* basement gradient — dark at top, slightly lighter at bottom (floor) */
+    background: linear-gradient(
+      to bottom,
+      #0c0620 0%,
+      #120830 40%,
+      #180f3a 60%,
+      #0e0820 100%
+    );
   }
 
-  /* ── HERO — centered OS screen ───────────────── */
-  .hero {
+  /* Scene background — no explicit z-index so it doesn't create a stacking context.
+     Monitor area (z-index: 3) paints on top naturally via DOM order. */
+  .scene-bg {
+    position: absolute;
+    inset: 0;
+  }
+
+  /*
+   * DESK LAYOUT — all fixed pixel values so nothing shifts with viewport.
+   * --desk-bottom: where the desk surface bottom edge sits from scene bottom.
+   * Everything on the desk references this.
+   */
+
+  /* Floor gradient behind everything at the bottom */
+  .scene-floor {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 140px;
+    background: linear-gradient(to bottom, transparent 0%, #080414 60%);
+    z-index: 1;
+  }
+
+  /* The desk — a proper table: thick surface + visible front face */
+  .scene-desk {
+    position: absolute;
+    bottom: 80px;          /* floor-to-desk height */
+    left: 0; right: 0;
+    z-index: 2;
+  }
+
+  .scene-desk__top {
+    height: 16px;          /* desk surface thickness */
+    background: linear-gradient(to bottom, #4a3560, #382848);
+    border-top: 3px solid #5a4070;
+    box-shadow:
+      0 2px 0 rgba(255,255,255,0.06),
+      0 4px 16px rgba(0,0,0,0.5);
+  }
+
+  .scene-desk__face {
+    height: 56px;          /* visible desk front panel */
+    background: linear-gradient(to bottom, #1e1238, #120c28);
+    border-bottom: 2px solid #0a0618;
+  }
+
+  /* Desk legs — two visible supports */
+  .scene-desk__legs {
+    position: absolute;
+    top: 16px;             /* starts right below the surface */
+    left: 0; right: 0;
+    height: 56px;
+    pointer-events: none;
+  }
+
+  .scene-desk__legs::before,
+  .scene-desk__legs::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    width: 20px;
+    height: 100%;
+    background: #0e0824;
+    border: 2px solid #1a1040;
+  }
+
+  .scene-desk__legs::before { left: 6%; }
+  .scene-desk__legs::after  { right: 6%; }
+
+  /* Desk lamp warm glow */
+  .scene-lamp-glow {
+    position: absolute;
+    bottom: 90px;
+    left: 4%;
+    width: 28%;
+    height: 45%;
+    background: radial-gradient(ellipse at 30% 90%, rgba(240,180,20,0.18) 0%, rgba(240,160,10,0.05) 45%, transparent 70%);
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  /* Monitor sits on the desk surface */
+  .scene-monitor-area {
+    position: absolute;
+    bottom: 96px;          /* 80px desk + 16px surface */
+    left: 50%;
+    transform: translateX(-50%);
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    min-height: calc(100vh - var(--nav-h));
-    padding: 3rem 2rem;
-    position: relative;
+    z-index: 3;
+  }
+
+  /* Duck sits on the desk surface, right side */
+  .scene-duck {
+    position: absolute;
+    bottom: 96px;          /* same level as desk surface */
+    right: 5%;
+    z-index: 4;
+    right: 5%;
+    z-index: 10;
+    font-size: 40px;
+    margin-top: 0;
   }
 
   /* CRT monitor — green phosphor screen
@@ -308,11 +474,11 @@
       0 0 40px #007a40,
       0 0 80px rgba(0,255,136,0.15),
       8px 8px 0 0 rgba(0,0,0,0.8);
-    width: min(480px, 90vw);
+    width: min(400px, 80vw);
   }
 
   .monitor__screen {
-    padding: 2.5rem 3rem;
+    padding: 1.5rem 2rem;
     position: relative;
     overflow: hidden;
     background: #020d06;
@@ -334,19 +500,19 @@
   }
 
   .monitor__label {
-    font-size: 13px;
+    font-size: 11px;
     color: #007a40;
-    margin-bottom: 1.5rem;
+    margin-bottom: 0.75rem;
     letter-spacing: 1px;
   }
 
   .monitor__title {
     font-family: var(--font-pixel);
-    font-size: clamp(28px, 6vw, 48px);
+    font-size: clamp(22px, 4vw, 36px);
     color: #00ff88;
     text-shadow: 0 0 16px #007a40;
     line-height: 1.2;
-    margin-bottom: 1.5rem;
+    margin-bottom: 0.75rem;
     animation: flicker 6s ease-in-out infinite;
   }
 
@@ -359,11 +525,11 @@
   }
 
   .monitor__sub {
-    font-size: 22px;
+    font-size: 18px;
     color: #00ff88;
     opacity: 0.8;
-    line-height: 1.8;
-    margin-bottom: 1.5rem;
+    line-height: 1.6;
+    margin-bottom: 0.75rem;
   }
 
   .monitor__status {
@@ -390,22 +556,20 @@
     --col-crt: #00ff88;
   }
 
-  /* Duck floats below the monitor */
-
   /* ── DUCK ────────────────────────────────────── */
   .duck {
     background: none;
     border: none;
     cursor: pointer;
     position: relative;
-    font-size: 40px;
-    padding: 8px;
+    font-size: 36px;
+    padding: 4px;
     animation: float 3s ease-in-out infinite;
     transition: transform 0.1s;
-    margin-top: 1.5rem;
+    z-index: 2;
   }
 
-  .duck:hover { transform: scale(1.1) rotate(-5deg); }
+  .duck:hover { transform: scale(1.15) rotate(-5deg); }
   .duck:active { transform: scale(0.9); }
 
   .duck__speech {
@@ -634,7 +798,7 @@
   }
 
   @media (max-width: 600px) {
-    .hero { flex-direction: column; align-items: center; }
     .bench-items { grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .scene-monitor-area { width: 90vw; }
   }
 </style>
