@@ -223,18 +223,26 @@
 {#if ssActive}
   <div class="ss-overlay" onclick={dismissSS} role="button" tabindex="0" aria-label="Click to dismiss screensaver" onkeydown={(e) => e.key === 'Enter' && dismissSS()}>
     <div class="ss-cat" style="left:{ssX}px; top:{ssY}px;">
-      <svg viewBox="0 0 42 39" width="80" height="74" style="image-rendering:pixelated;">
+      <svg viewBox="0 0 42 42" width="80" height="80" shape-rendering="crispEdges" style="image-rendering:pixelated;">
+        <rect width="42" height="42" fill="#180f3a"/>
+        <!-- hat amber -->
         <rect x="15" y="0"  width="12" height="3"  fill="#F19406"/>
         <rect x="15" y="3"  width="12" height="3"  fill="#F19406"/>
         <rect x="9"  y="6"  width="24" height="3"  fill="#F19406"/>
         <rect x="15" y="9"  width="12" height="3"  fill="#F19406"/>
-        <rect x="6"  y="9"  width="6"  height="6"  fill="#00ff88"/>
-        <rect x="30" y="9"  width="6"  height="6"  fill="#00ff88"/>
-        <rect x="6"  y="12" width="30" height="18" fill="#00ff88"/>
-        <rect x="12" y="18" width="6"  height="6"  fill="#180f3a"/>
-        <rect x="24" y="18" width="6"  height="6"  fill="#180f3a"/>
-        <rect x="18" y="24" width="6"  height="3"  fill="#007a40"/>
-        <rect x="9"  y="27" width="24" height="3"  fill="#00ff88"/>
+        <!-- ears + head magenta-purple -->
+        <rect x="6"  y="9"  width="6"  height="6"  fill="#c060c8"/>
+        <rect x="30" y="9"  width="6"  height="6"  fill="#c060c8"/>
+        <rect x="6"  y="12" width="30" height="18" fill="#c060c8"/>
+        <!-- eyes -->
+        <rect x="12" y="18" width="6"  height="6"  fill="#110830"/>
+        <rect x="24" y="18" width="6"  height="6"  fill="#110830"/>
+        <!-- nose + mouth -->
+        <rect x="18" y="24" width="6"  height="3"  fill="#7030a0"/>
+        <rect x="12" y="27" width="3"  height="3"  fill="#7030a0"/>
+        <rect x="27" y="27" width="3"  height="3"  fill="#7030a0"/>
+        <!-- chin -->
+        <rect x="9"  y="27" width="24" height="3"  fill="#c060c8"/>
       </svg>
       <p class="ss-label mono">click anywhere to wake</p>
     </div>

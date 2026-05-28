@@ -3,7 +3,15 @@
   import { getBookEgg, pickQuote, pickCheese } from '$lib/data/bookEggs';
   import type { MovieQuote } from '$lib/data/bookEggs';
 
-  let { onmugfall = () => {} }: { onmugfall?: () => void } = $props();
+  let { onmugfall = () => {}, onfirestart = () => {} }: { onmugfall?: () => void; onfirestart?: () => void } = $props();
+
+  let ironFire = $state(false);
+
+  function clickIron() {
+    if (ironFire) return;
+    ironFire = true;
+    onfirestart();
+  }
 
   let activeQuote  = $state<MovieQuote | null>(null);
   let mugFallen    = $state(false);
@@ -345,7 +353,7 @@
 
 <!-- ── DESK LEFT OBJECTS ─────────────────────────────────────────────────── -->
 <div class="desk-left" aria-hidden="true">
-  <svg viewBox="0 0 200 140" width="200" height="140" style="image-rendering:pixelated; overflow:visible;">
+  <svg viewBox="0 0 300 140" width="300" height="140" style="image-rendering:pixelated; overflow:visible;">
     <!-- Desk lamp -->
     <rect x="20" y="100" width="36" height="6"  fill="#2a2a3a"/>  <!-- base -->
     <rect x="35" y="30"  width="6"  height="70" fill="#2a2a3a"/>  <!-- pole -->
@@ -413,6 +421,82 @@
     <rect x="110" y="40" width="4" height="4" fill="#ff8800" opacity="0.7"/>
     <!-- USB port -->
     <rect x="152" y="38" width="6" height="6" fill="#4040c0"/>
+
+    <!-- ── SOLDERING STATION — shifted up 28px so display clears desk edge ── -->
+    <g transform="translate(0,-28)">
+
+    <!-- Solder spool — silver reel with gold core -->
+    <rect x="194" y="96"  width="5"  height="20" fill="#aaaaaa"/>
+    <rect x="215" y="96"  width="5"  height="20" fill="#aaaaaa"/>
+    <rect x="194" y="96"  width="26" height="5"  fill="#aaaaaa"/>
+    <rect x="194" y="111" width="26" height="5"  fill="#aaaaaa"/>
+    <rect x="199" y="101" width="16" height="10" fill="#e0c040"/>
+    <rect x="203" y="103" width="8"  height="6"  fill="#c0a030"/>
+    <rect x="205" y="88"  width="3"  height="9"  fill="#cccccc"/>
+    <rect x="203" y="84"  width="3"  height="6"  fill="#cccccc"/>
+    <rect x="205" y="82"  width="8"  height="3"  fill="#cccccc"/>
+
+    <!-- Base unit — LIGHT GREY like a real Hakko station -->
+    <rect x="210" y="86" width="56" height="40" fill="#c0c0c8"/>
+    <rect x="210" y="86" width="56" height="5"  fill="#d8d8e0"/>
+    <rect x="212" y="89" width="52" height="2"  fill="#e8e8f0"/>
+    <rect x="210" y="120" width="56" height="6"  fill="#a8a8b0"/>
+    <!-- display window — bigger, high contrast -->
+    <rect x="212" y="92"  width="32" height="22" fill="#000000"/>
+    <rect x="213" y="93"  width="30" height="20" fill="#020802"/>
+    <!-- bold digits: 3 bright bars = "350" suggestion -->
+    <rect x="215" y="95"  width="8"  height="16" fill="#00ff44"/>
+    <rect x="225" y="95"  width="8"  height="16" fill="#00ff44"/>
+    <rect x="235" y="95"  width="8"  height="16" fill="#00ff44"/>
+    <!-- digit glow -->
+    <rect x="215" y="95"  width="8"  height="16" fill="#00ff44" opacity="0.3" style="filter:blur(1px)"/>
+    <!-- knob — black with highlight -->
+    <rect x="242" y="96"  width="14" height="14" fill="#303030"/>
+    <rect x="244" y="98"  width="10" height="10" fill="#484848"/>
+    <rect x="247" y="100" width="3"  height="3"  fill="#e0e0e0"/>
+    <!-- power LED — bright red -->
+    <rect x="258" y="96"  width="6"  height="6"  fill="#ff2020"/>
+    <!-- brand label suggestion -->
+    <rect x="214" y="112" width="20" height="4"  fill="#a0a0a8"/>
+    <!-- feet -->
+    <rect x="214" y="124" width="12" height="4"  fill="#808088"/>
+    <rect x="250" y="124" width="12" height="4"  fill="#808088"/>
+
+    <!-- Iron stand — dark cup with bright brass wool -->
+    <rect x="268" y="98"  width="30" height="28" fill="#505058"/>
+    <rect x="270" y="100" width="26" height="24" fill="#484050"/>
+    <rect x="272" y="102" width="6"  height="6"  fill="#f0c020"/>
+    <rect x="280" y="104" width="6"  height="5"  fill="#e0b018"/>
+    <rect x="276" y="100" width="6"  height="6"  fill="#f8d028"/>
+    <rect x="274" y="108" width="6"  height="5"  fill="#e8c020"/>
+    <rect x="282" y="100" width="5"  height="6"  fill="#f0b820"/>
+
+    <!-- Soldering iron — YELLOW, short, clickable -->
+    <g
+      role="button" tabindex="0" aria-label="Soldering iron"
+      style="cursor:{ironFire ? 'default' : 'pointer'};"
+      onclick={clickIron}
+      onkeydown={(e) => e.key === 'Enter' && clickIron()}
+    >
+      <rect x="276" y="58"  width="8" height="44" fill="#e8c020"/>
+      <!-- grip bands -->
+      <rect x="277" y="62"  width="3" height="3" fill="#c0a010"/>
+      <rect x="281" y="62"  width="2" height="3" fill="#c0a010"/>
+      <rect x="277" y="70"  width="3" height="3" fill="#c0a010"/>
+      <rect x="281" y="70"  width="2" height="3" fill="#c0a010"/>
+      <rect x="277" y="78"  width="3" height="3" fill="#c0a010"/>
+      <rect x="281" y="78"  width="2" height="3" fill="#c0a010"/>
+      <!-- heating collar -->
+      <rect x="276" y="88"  width="8" height="5" fill="#303030"/>
+      <!-- chrome element + tip -->
+      <rect x="277" y="93"  width="6" height="4" fill="#c0c0c0"/>
+      <rect x="277" y="97"  width="6" height="3" fill="#e0e0e0"/>
+      <rect x="278" y="100" width="4" height="2" fill="#f0f0f0"/>
+      <!-- heat glow -->
+      <rect x="278" y="102" width="4" height="2" fill="#ff8800"/>
+      <rect x="279" y="100" width="2" height="2" fill="#ffcc00" opacity="0.7"/>
+    </g>
+    </g><!-- end soldering station translate -->
   </svg>
 </div>
 
@@ -632,6 +716,26 @@
   </div>
 {/if}
 
+<!-- ── IRON FIRE (appears when iron clicked) ─────────────────────────────── -->
+{#if ironFire}
+  <div class="iron-fire" aria-hidden="true">
+    <svg viewBox="0 0 24 40" width="24" height="40" style="image-rendering:pixelated; overflow:visible;">
+      <!-- pixel flame — layered rects with animation -->
+      <rect class="flame f1" x="8"  y="28" width="8"  height="12" fill="#ff4400"/>
+      <rect class="flame f2" x="6"  y="20" width="12" height="14" fill="#ff6600"/>
+      <rect class="flame f3" x="8"  y="12" width="8"  height="12" fill="#ff8800"/>
+      <rect class="flame f4" x="10" y="6"  width="4"  height="10" fill="#ffaa00"/>
+      <rect class="flame f5" x="2"  y="22" width="6"  height="10" fill="#ff4400"/>
+      <rect class="flame f6" x="16" y="20" width="6"  height="12" fill="#ff5500"/>
+      <rect class="flame f7" x="4"  y="14" width="6"  height="8"  fill="#ff7700"/>
+      <rect class="flame f8" x="14" y="14" width="6"  height="8"  fill="#ff6600"/>
+      <!-- bright core -->
+      <rect class="flame f3" x="9"  y="18" width="6"  height="8"  fill="#ffcc00"/>
+      <rect class="flame f4" x="10" y="12" width="4"  height="6"  fill="#ffffff" opacity="0.7"/>
+    </svg>
+  </div>
+{/if}
+
 <!-- ── FLOOR CABLES ──────────────────────────────────────────────────────── -->
 <div class="floor-cables" aria-hidden="true">
   <svg viewBox="0 0 600 60" width="600" height="60" style="image-rendering:pixelated;">
@@ -765,6 +869,41 @@
     right: 0;
     image-rendering: pixelated;
     z-index: 1;
+  }
+
+  /* ── IRON FIRE ─── */
+  .iron-fire {
+    position: absolute;
+    /* align above the iron tip — iron is at x≈276-284 in the 300px SVG at left:0,
+       after translate(-28) the tip is ~66px above SVG bottom.
+       SVG bottom = 96px from viewport bottom → tip at 96+66=162px from bottom */
+    bottom: 162px;
+    left: calc(300px * (278/300) - 12px);  /* centre over iron tip x≈278 */
+    z-index: 3;
+    pointer-events: none;
+    animation: fire-appear 0.2s ease both;
+  }
+
+  @keyframes fire-appear {
+    from { transform: scaleY(0); transform-origin: bottom; opacity: 0; }
+    to   { transform: scaleY(1); transform-origin: bottom; opacity: 1; }
+  }
+
+  .flame { animation: flicker-flame 0.3s step-end infinite alternate; }
+  .f1 { animation-delay: 0s;    }
+  .f2 { animation-delay: 0.05s; }
+  .f3 { animation-delay: 0.1s;  }
+  .f4 { animation-delay: 0.15s; }
+  .f5 { animation-delay: 0.08s; }
+  .f6 { animation-delay: 0.12s; }
+  .f7 { animation-delay: 0.04s; }
+  .f8 { animation-delay: 0.18s; }
+
+  @keyframes flicker-flame {
+    0%   { opacity: 1;   transform: scaleY(1) translateX(0); }
+    33%  { opacity: 0.8; transform: scaleY(0.9) translateX(-1px); }
+    66%  { opacity: 1;   transform: scaleY(1.1) translateX(1px); }
+    100% { opacity: 0.9; transform: scaleY(0.95) translateX(0); }
   }
 
   /* ── STEAM ANIMATION ─── */

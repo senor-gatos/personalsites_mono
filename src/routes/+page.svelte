@@ -131,7 +131,14 @@
 
     <!-- Background: wall, shelves, clutter -->
     <div class="scene-bg" aria-hidden="true">
-      <BasementScene onmugfall={() => {
+      <BasementScene
+      onfirestart={() => {
+        duckMessage = "basements so hot right now";
+        showDuckMsg = true;
+        clearTimeout(duckTimer);
+        duckTimer = setTimeout(() => { showDuckMsg = false; }, 3500);
+      }}
+      onmugfall={() => {
         duckMessage = "you're a clumsy one, bud";
         showDuckMsg = true;
         clearTimeout(duckTimer);
