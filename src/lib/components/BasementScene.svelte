@@ -3,7 +3,18 @@
   import { getBookEgg, pickQuote, pickCheese } from '$lib/data/bookEggs';
   import type { MovieQuote } from '$lib/data/bookEggs';
 
-  let activeQuote = $state<MovieQuote | null>(null);
+  let { onmugfall = () => {} }: { onmugfall?: () => void } = $props();
+
+  let activeQuote  = $state<MovieQuote | null>(null);
+  let mugFallen    = $state(false);
+  let mugSplat     = $state(false);
+
+  function clickMug() {
+    if (mugFallen) return;
+    mugFallen = true;
+    setTimeout(() => { mugSplat = true; }, 600);
+    setTimeout(() => { onmugfall(); }, 700);
+  }
 
   function clickBook(index: number) {
     const egg = getBookEgg(index);
@@ -194,9 +205,17 @@
 </div>
 
 <!-- ── WALL DECORATIONS ─────────────────────────────────────────────────── -->
-<div class="wall-deco" aria-hidden="true">
-  <!-- Sci-fi movie poster -->
-  <svg class="poster" viewBox="0 0 72 96" preserveAspectRatio="xMidYMid meet">
+<div class="wall-deco">
+  <!-- Sci-fi space poster — links to NASA climate science -->
+  <svg class="poster" viewBox="0 0 72 96" preserveAspectRatio="xMidYMid meet"
+    role="link"
+    tabindex="0"
+    aria-label="Space poster — NASA Scientific Consensus on Climate Change"
+    title="NASA: Scientific Consensus on Climate Change"
+    style="cursor:pointer;"
+    onclick={() => window.open('https://science.nasa.gov/climate-change/scientific-consensus/', '_blank', 'noopener')}
+    onkeydown={(e) => e.key === 'Enter' && window.open('https://science.nasa.gov/climate-change/scientific-consensus/', '_blank', 'noopener')}
+  >
     <rect x="0" y="0" width="72" height="96" fill="#08040f"/>
     <!-- Planet -->
     <rect x="20" y="24" width="32" height="32" fill="#2030a0"/>
@@ -337,21 +356,45 @@
     <!-- bulb glow -->
     <rect x="72" y="12" width="12" height="12" fill="#fff8e0" opacity="0.9"/>
 
-    <!-- Stacked books (lying flat) -->
-    <rect x="100" y="112" width="80" height="14" fill="#4060c0"/>
-    <rect x="100" y="112" width="80" height="3"  fill="#6080d8"/>
-    <rect x="102" y="98"  width="74" height="14" fill="#c04040"/>
-    <rect x="102" y="98"  width="74" height="3"  fill="#d86060"/>
-    <rect x="104" y="84"  width="76" height="14" fill="#f0a020"/>
-    <rect x="104" y="84"  width="76" height="3"  fill="#f8b840"/>
-    <rect x="106" y="70"  width="70" height="14" fill="#40a040"/>
-    <rect x="106" y="70"  width="70" height="3"  fill="#60b860"/>
-    <rect x="108" y="58"  width="68" height="12" fill="#8040c0"/>
-    <rect x="108" y="58"  width="68" height="3"  fill="#9858d0"/>
-    <!-- book spine labels (little rects on spines) -->
-    <rect x="120" y="114" width="20" height="4" fill="rgba(255,255,255,0.2)"/>
-    <rect x="120" y="100" width="20" height="4" fill="rgba(255,255,255,0.2)"/>
-    <rect x="120" y="86"  width="20" height="4" fill="rgba(255,255,255,0.2)"/>
+    <!-- Stacked books (lying flat) — each links somewhere -->
+    <g role="button" tabindex="0" aria-label="C for Dummies" title="C for Dummies" style="cursor:pointer"
+       onclick={() => window.open('https://c-for-dummies.com/', '_blank', 'noopener')}
+       onkeydown={(e) => e.key==='Enter' && window.open('https://c-for-dummies.com/', '_blank', 'noopener')}>
+      <rect x="100" y="112" width="80" height="14" fill="#4060c0"/>
+      <rect x="100" y="112" width="80" height="3"  fill="#6080d8"/>
+      <rect x="120" y="114" width="20" height="4"  fill="rgba(255,255,255,0.2)"/>
+      <rect class="book-hover" x="100" y="112" width="80" height="14" fill="rgba(255,255,255,0)"/>
+    </g>
+    <g role="button" tabindex="0" aria-label="xkcd" title="xkcd" style="cursor:pointer"
+       onclick={() => window.open('https://xkcd.com/', '_blank', 'noopener')}
+       onkeydown={(e) => e.key==='Enter' && window.open('https://xkcd.com/', '_blank', 'noopener')}>
+      <rect x="102" y="98"  width="74" height="14" fill="#c04040"/>
+      <rect x="102" y="98"  width="74" height="3"  fill="#d86060"/>
+      <rect x="120" y="100" width="20" height="4"  fill="rgba(255,255,255,0.2)"/>
+      <rect class="book-hover" x="102" y="98" width="74" height="14" fill="rgba(255,255,255,0)"/>
+    </g>
+    <g role="button" tabindex="0" aria-label="NYT Connections" title="NYT Connections" style="cursor:pointer"
+       onclick={() => window.open('https://www.nytimes.com/games/connections', '_blank', 'noopener')}
+       onkeydown={(e) => e.key==='Enter' && window.open('https://www.nytimes.com/games/connections', '_blank', 'noopener')}>
+      <rect x="104" y="84"  width="76" height="14" fill="#f0a020"/>
+      <rect x="104" y="84"  width="76" height="3"  fill="#f8b840"/>
+      <rect x="120" y="86"  width="20" height="4"  fill="rgba(255,255,255,0.2)"/>
+      <rect class="book-hover" x="104" y="84" width="76" height="14" fill="rgba(255,255,255,0)"/>
+    </g>
+    <g role="button" tabindex="0" aria-label="xkcd" title="xkcd" style="cursor:pointer"
+       onclick={() => window.open('https://xkcd.com/', '_blank', 'noopener')}
+       onkeydown={(e) => e.key==='Enter' && window.open('https://xkcd.com/', '_blank', 'noopener')}>
+      <rect x="106" y="70"  width="70" height="14" fill="#40a040"/>
+      <rect x="106" y="70"  width="70" height="3"  fill="#60b860"/>
+      <rect class="book-hover" x="106" y="70" width="70" height="14" fill="rgba(255,255,255,0)"/>
+    </g>
+    <g role="button" tabindex="0" aria-label="C for Dummies" title="C for Dummies" style="cursor:pointer"
+       onclick={() => window.open('https://c-for-dummies.com/', '_blank', 'noopener')}
+       onkeydown={(e) => e.key==='Enter' && window.open('https://c-for-dummies.com/', '_blank', 'noopener')}>
+      <rect x="108" y="58"  width="68" height="12" fill="#8040c0"/>
+      <rect x="108" y="58"  width="68" height="3"  fill="#9858d0"/>
+      <rect class="book-hover" x="108" y="58" width="68" height="12" fill="rgba(255,255,255,0)"/>
+    </g>
 
     <!-- Breadboard / Arduino-ish thing -->
     <rect x="100" y="30" width="56" height="28" fill="#207020"/>
@@ -376,23 +419,33 @@
 <!-- ── DESK RIGHT OBJECTS ─────────────────────────────────────────────────── -->
 <div class="desk-right" aria-hidden="true">
   <svg viewBox="0 0 220 140" width="220" height="140" style="image-rendering:pixelated; overflow:visible;">
-    <!-- Coffee mug -->
-    <rect x="10" y="48" width="44" height="52" fill="#6a3c1c"/>
-    <rect x="10" y="48" width="44" height="6"  fill="#502c10"/>
-    <!-- mug lip highlight -->
-    <rect x="10" y="48" width="44" height="3"  fill="#7a4c2c"/>
-    <!-- coffee surface -->
-    <rect x="14" y="51" width="36" height="6"  fill="#3a1c08"/>
-    <!-- handle -->
-    <rect x="54" y="58" width="10" height="4"  fill="#6a3c1c"/>
-    <rect x="58" y="62" width="6"  height="20" fill="#6a3c1c"/>
-    <rect x="54" y="82" width="10" height="4"  fill="#6a3c1c"/>
-    <!-- mug text/logo suggestion -->
-    <rect x="22" y="70" width="20" height="12" fill="rgba(255,255,255,0.08)"/>
-    <!-- steam wisps (animated via CSS) -->
-    <rect x="20" y="34" width="4" height="12" fill="#d0d8f0" opacity="0.4" class="steam s1"/>
-    <rect x="30" y="28" width="4" height="18" fill="#d0d8f0" opacity="0.35" class="steam s2"/>
-    <rect x="42" y="32" width="4" height="14" fill="#d0d8f0" opacity="0.3" class="steam s3"/>
+    <!-- Coffee mug — clickable, falls when clicked -->
+    <g
+      class="mug-group"
+      class:mug-falling={mugFallen}
+      role="button"
+      tabindex="0"
+      aria-label="Coffee mug"
+      style="cursor:{mugFallen ? 'default' : 'pointer'}; transform-origin: 54px 100px;"
+      onclick={clickMug}
+      onkeydown={(e) => e.key === 'Enter' && clickMug()}
+    >
+      <rect x="10" y="48" width="44" height="52" fill="#6a3c1c"/>
+      <rect x="10" y="48" width="44" height="6"  fill="#502c10"/>
+      <rect x="10" y="48" width="44" height="3"  fill="#7a4c2c"/>
+      <rect x="14" y="51" width="36" height="6"  fill="#3a1c08"/>
+      <!-- handle -->
+      <rect x="54" y="58" width="10" height="4"  fill="#6a3c1c"/>
+      <rect x="58" y="62" width="6"  height="20" fill="#6a3c1c"/>
+      <rect x="54" y="82" width="10" height="4"  fill="#6a3c1c"/>
+      <rect x="22" y="70" width="20" height="12" fill="rgba(255,255,255,0.08)"/>
+      {#if !mugFallen}
+        <!-- steam only before falling -->
+        <rect x="20" y="34" width="4" height="12" fill="#d0d8f0" opacity="0.4" class="steam s1"/>
+        <rect x="30" y="28" width="4" height="18" fill="#d0d8f0" opacity="0.35" class="steam s2"/>
+        <rect x="42" y="32" width="4" height="14" fill="#d0d8f0" opacity="0.3" class="steam s3"/>
+      {/if}
+    </g>
 
     <!-- Scattered papers / sticky notes -->
     <rect x="74"  y="88" width="60" height="44" fill="#f5e840" transform="rotate(-3 74 88)"/>
@@ -556,6 +609,29 @@
   </svg>
 </div>
 
+<!-- ── COFFEE SPLAT (appears when mug falls) ─────────────────────────────── -->
+{#if mugSplat}
+  <div class="coffee-splat" aria-hidden="true">
+    <svg viewBox="0 0 120 50" width="120" height="50" style="image-rendering:pixelated; overflow:visible;">
+      <!-- main puddle -->
+      <ellipse cx="55" cy="35" rx="50" ry="12" fill="#3a1c08" opacity="0.85"/>
+      <ellipse cx="55" cy="35" rx="38" ry="8"  fill="#4a2410" opacity="0.9"/>
+      <!-- splat blobs -->
+      <ellipse cx="18" cy="28" rx="10" ry="6"  fill="#3a1c08" opacity="0.7" transform="rotate(-20 18 28)"/>
+      <ellipse cx="90" cy="24" rx="8"  ry="5"  fill="#3a1c08" opacity="0.65" transform="rotate(15 90 24)"/>
+      <ellipse cx="100" cy="38" rx="12" ry="5" fill="#3a1c08" opacity="0.6" transform="rotate(-10 100 38)"/>
+      <ellipse cx="12" cy="40" rx="8"  ry="4"  fill="#4a2410" opacity="0.55"/>
+      <!-- tiny drops -->
+      <ellipse cx="30" cy="18" rx="4" ry="3" fill="#3a1c08" opacity="0.5"/>
+      <ellipse cx="75" cy="16" rx="3" ry="2" fill="#3a1c08" opacity="0.45"/>
+      <ellipse cx="105" cy="22" rx="3" ry="2" fill="#3a1c08" opacity="0.4"/>
+      <!-- mug lying on its side (knocked over) -->
+      <rect x="52" y="22" width="36" height="28" fill="#6a3c1c" transform="rotate(90 70 36)"/>
+      <rect x="52" y="22" width="36" height="5"  fill="#502c10" transform="rotate(90 70 36)"/>
+    </svg>
+  </div>
+{/if}
+
 <!-- ── FLOOR CABLES ──────────────────────────────────────────────────────── -->
 <div class="floor-cables" aria-hidden="true">
   <svg viewBox="0 0 600 60" width="600" height="60" style="image-rendering:pixelated;">
@@ -599,6 +675,13 @@
     height: auto;
     image-rendering: pixelated;
     box-shadow: 0 0 0 2px #241650, 4px 4px 0 rgba(0,0,0,0.4);
+    transition: box-shadow 0.2s, transform 0.2s;
+    pointer-events: all;  /* override parent's pointer-events: none */
+  }
+
+  .poster:hover {
+    box-shadow: 0 0 0 2px var(--col-crt), 0 0 12px rgba(0,255,136,0.3), 4px 4px 0 rgba(0,0,0,0.4);
+    transform: scale(1.05);
   }
 
   .wall-cables {
@@ -702,6 +785,37 @@
   /* Book hover glow */
   :global(.book-hover:hover) {
     fill: rgba(255,255,255,0.14) !important;
+  }
+
+  /* ── MUG FALL ─── */
+  .mug-group:not(.mug-falling):hover :global(rect:first-child) {
+    filter: brightness(1.2);
+  }
+
+  :global(.mug-falling) {
+    animation: mug-fall 0.6s cubic-bezier(0.55, 0.06, 0.68, 0.19) forwards;
+    transform-origin: 54px 100px;
+  }
+
+  @keyframes mug-fall {
+    0%   { transform: rotate(0deg)   translate(0px,  0px);  }
+    25%  { transform: rotate(25deg)  translate(8px,  0px);  }
+    55%  { transform: rotate(85deg)  translate(20px, 10px); }
+    100% { transform: rotate(90deg)  translate(30px, 160px); opacity: 0; }
+  }
+
+  /* ── COFFEE SPLAT ─── */
+  .coffee-splat {
+    position: absolute;
+    bottom: 30px;
+    right: 60px;
+    z-index: 2;
+    animation: splat-in 0.3s cubic-bezier(0.34,1.56,0.64,1) both;
+  }
+
+  @keyframes splat-in {
+    from { transform: scale(0.2); opacity: 0; }
+    to   { transform: scale(1);   opacity: 1; }
   }
 </style>
 

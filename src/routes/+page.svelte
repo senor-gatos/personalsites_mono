@@ -24,6 +24,7 @@
   function onDuckPointerDown(e: PointerEvent) {
     e.preventDefault();
     dragging = true;
+    followShown = false; // reset so it fires again after each new drag
     const el = e.currentTarget as HTMLElement;
     const rect = el.getBoundingClientRect();
     dragOffX = e.clientX - rect.left;
@@ -40,9 +41,24 @@
   function onDuckPointerUp(e: PointerEvent) {
     if (!dragging) return;
     dragging = false;
-    // only count as a click if it barely moved
     if (duckX === null) clickDuck();
   }
+
+  let followShown = $state(false);
+
+  onMount(() => {
+    const onScroll = () => {
+      if (duckX !== null && !followShown) {
+        followShown = true;
+        duckMessage = 'im following you';
+        showDuckMsg = true;
+        clearTimeout(duckTimer);
+        duckTimer = setTimeout(() => { showDuckMsg = false; }, 3000);
+      }
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  });
 
   const duckLines = [
     'quack.',
@@ -115,7 +131,12 @@
 
     <!-- Background: wall, shelves, clutter -->
     <div class="scene-bg" aria-hidden="true">
-      <BasementScene />
+      <BasementScene onmugfall={() => {
+        duckMessage = "you're a clumsy one, bud";
+        showDuckMsg = true;
+        clearTimeout(duckTimer);
+        duckTimer = setTimeout(() => { showDuckMsg = false; }, 3500);
+      }} />
     </div>
 
     <!-- Desk surface -->
@@ -164,7 +185,7 @@
       class="duck"
       style="
         position: {duckX !== null ? 'fixed' : 'absolute'};
-        {duckX !== null ? `left:${duckX}px; top:${duckY}px;` : 'bottom:96px; right:5%;'}
+        {duckX !== null ? `left:${duckX}px; top:${duckY}px;` : 'bottom:4px; right:5%;'}
         z-index: 100;
         font-size: 44px;
         margin: 0;
