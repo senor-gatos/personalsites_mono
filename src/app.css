@@ -1,0 +1,390 @@
+/* =====================================================
+   SENOR GATOS — THE WORKSHOP
+   Global Design System
+   ===================================================== */
+
+:root {
+  /* Palette — Pop Art Workshop */
+  --col-bg:           #180f3a;   /* deep indigo void */
+  --col-bench:        #241965;   /* main panel surface */
+  --col-wood-light:   #3d2475;   /* lighter panels */
+  --col-wood-mid:     #150c30;   /* nav / footer */
+  /* --col-crt is the main UI accent — magenta-purple */
+  /* The CRT monitor screen locally overrides these back to green */
+  --col-crt:          #c060c8;   /* magenta-purple accent */
+  --col-crt-dim:      #7030a0;
+  --col-crt-glow:     #e090e8;
+  --col-amber:        #F19406;   /* warm amber LED */
+  --col-amber-dim:    #a06000;
+  --col-amber-glow:   #ffc040;
+  --col-pink:         #B73D6E;   /* hot pink accent */
+  --col-paper:        #f0e0ff;   /* lavender-white text */
+  --col-paper-dark:   #ddb8f0;   /* light lavender — readable on dark indigo */
+  --col-ink:          #110830;   /* dark ink */
+  --col-red:          #B73D6E;   /* use hot pink for warnings */
+  --col-blue:         #653993;   /* mid purple */
+  --col-pixel-border: #3d2475;
+  --col-neon:         #00ff88;   /* phosphor green — hover/active glow */
+  --col-neon-dim:     #007a40;
+
+  /* Typography */
+  --font-pixel:     'Press Start 2P', monospace;
+  --font-mono:      'VT323', monospace;
+  --font-body:      'Crimson Pro', Georgia, serif;
+
+  /* Sizing */
+  --px: 4px; /* 1 pixel unit */
+  --nav-h: 56px;
+
+  /* Pixel border (image-rendering trick) */
+  image-rendering: pixelated;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--col-bg);
+  color: var(--col-paper);
+  font-family: var(--font-body);
+  font-size: 18px;
+  line-height: 1.7;
+  min-height: 100vh;
+}
+
+/* =====================================================
+   PIXEL ART UTILITY CLASSES
+   ===================================================== */
+
+/* Chunky pixel box — uses box-shadow to fake a pixel border */
+.pixel-box {
+  position: relative;
+  background: var(--col-bench);
+  image-rendering: pixelated;
+  box-shadow:
+    /* outer border */
+    0    -4px  0 0 var(--col-pixel-border),
+    0     4px  0 0 var(--col-pixel-border),
+    -4px  0    0 0 var(--col-pixel-border),
+    4px   0    0 0 var(--col-pixel-border),
+    /* inner highlight top-left */
+    -4px -4px  0 0 var(--col-pixel-border),
+    4px  -4px  0 0 var(--col-pixel-border),
+    -4px  4px  0 0 var(--col-pixel-border),
+    4px   4px  0 0 var(--col-pixel-border),
+    /* drop shadow */
+    8px   8px  0 0 rgba(0,0,0,0.6);
+}
+
+.pixel-box--amber {
+  border: 4px solid var(--col-amber);
+  box-shadow:
+    0 0 0 4px var(--col-amber-dim),
+    8px 8px 0 0 rgba(0,0,0,0.6);
+}
+
+.pixel-box--crt {
+  border: 4px solid var(--col-crt);
+  box-shadow:
+    0 0 0 4px var(--col-crt-dim),
+    0 0 16px var(--col-crt-dim),
+    8px 8px 0 0 rgba(0,0,0,0.6);
+}
+
+/* Inset panel (looks recessed) */
+.pixel-inset {
+  box-shadow:
+    inset 4px 4px 0 0 rgba(0,0,0,0.5),
+    inset -2px -2px 0 0 rgba(255,255,255,0.05);
+}
+
+/* Stamp / badge */
+.pixel-stamp {
+  font-family: var(--font-pixel);
+  font-size: 8px;
+  padding: 4px 8px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  border: 2px solid currentColor;
+  display: inline-block;
+}
+
+.stamp--crt   { color: var(--col-crt);   border-color: var(--col-crt); }
+.stamp--amber { color: var(--col-amber); border-color: var(--col-amber); }
+.stamp--red   { color: var(--col-red);   border-color: var(--col-red); }
+.stamp--blue  { color: var(--col-blue);  border-color: var(--col-blue); }
+
+/* =====================================================
+   BLINKING CURSOR / LED ANIMATIONS
+   ===================================================== */
+
+@keyframes blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+@keyframes led-pulse {
+  0%, 100% { box-shadow: 0 0 4px 2px var(--col-crt-dim); opacity: 0.8; }
+  50%       { box-shadow: 0 0 8px 4px var(--col-crt);     opacity: 1; }
+}
+
+@keyframes flicker {
+  0%, 19%, 21%, 100% { opacity: 1; }
+  20% { opacity: 0.85; }
+}
+
+@keyframes scanline {
+  0%   { transform: translateY(-100%); }
+  100% { transform: translateY(100vh); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-6px); }
+}
+
+.blink { animation: blink 1s step-end infinite; }
+.led   {
+  width: 8px; height: 8px;
+  border-radius: 0; /* pixel style — square LED */
+  background: var(--col-crt);
+  display: inline-block;
+  animation: led-pulse 2s ease-in-out infinite;
+}
+.led--amber { background: var(--col-amber); animation: led-pulse 2s ease-in-out infinite; }
+.led--blue  {
+  background: #B73D6E;
+  animation: led-pulse-blue 1.4s ease-in-out infinite;
+}
+
+@keyframes led-pulse-blue {
+  0%, 100% { box-shadow: 0 0 4px 2px #7a2040; opacity: 0.8; }
+  50%       { box-shadow: 0 0 10px 5px #B73D6E; opacity: 1; }
+}
+
+/* =====================================================
+   TYPOGRAPHY
+   ===================================================== */
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-pixel);
+  line-height: 1.4;
+  color: var(--col-crt);
+}
+
+h1 { font-size: clamp(14px, 2vw, 20px); }
+h2 { font-size: clamp(11px, 1.5vw, 16px); }
+h3 { font-size: clamp(9px, 1.2vw, 12px); }
+
+.mono { font-family: var(--font-mono); font-size: 1.2em; }
+.pixel-text { font-family: var(--font-pixel); }
+
+a {
+  color: var(--col-crt);
+  text-decoration: none;
+  transition: color 0.1s;
+}
+a:hover {
+  color: var(--col-neon);
+  text-shadow: 0 0 8px rgba(0,255,136,0.4);
+}
+
+p { margin-bottom: 1em; }
+
+/* =====================================================
+   CONTENT AREA (blog posts, project pages)
+   — clean and readable, "inside the notebook"
+   ===================================================== */
+
+.content-area {
+  background: #1e1248;
+  color: var(--col-paper);
+  font-family: var(--font-body);
+  padding: 3rem 4rem;
+  max-width: 72ch;
+  border: 4px solid var(--col-pixel-border);
+  box-shadow: 8px 8px 0 0 rgba(0,0,0,0.6);
+  position: relative;
+}
+
+.content-area h1,
+.content-area h2,
+.content-area h3 {
+  color: var(--col-neon);
+  font-family: var(--font-pixel);
+}
+
+.content-area h1 { font-size: 14px; margin-bottom: 1.5rem; }
+.content-area h2 { font-size: 11px; margin: 2rem 0 1rem; }
+.content-area h3 { font-size: 9px;  margin: 1.5rem 0 0.75rem; }
+
+/* Body text inside articles — bright enough to read */
+.content-area p,
+.content-area li {
+  color: #f0e0ff;
+  line-height: 1.8;
+}
+
+.content-area strong { color: #ffffff; }
+
+.content-area a  {
+  color: var(--col-neon);
+  text-decoration: underline;
+  text-decoration-color: rgba(0,255,136,0.3);
+}
+.content-area a:hover {
+  color: #ffffff;
+  text-shadow: 0 0 8px rgba(0,255,136,0.5);
+}
+
+.content-area code {
+  font-family: var(--font-mono);
+  font-size: 1.1em;
+  background: rgba(192,96,200,0.15);
+  color: #e8b4f8;
+  padding: 1px 6px;
+}
+
+.content-area pre {
+  background: #110830;
+  color: var(--col-neon);
+  font-family: var(--font-mono);
+  font-size: 1.1em;
+  padding: 1.5rem;
+  overflow-x: auto;
+  margin: 1.5rem 0;
+  border-left: 4px solid var(--col-neon);
+}
+
+/* Subtle grid lines on content area */
+.content-area::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 27px,
+      rgba(192,96,200,0.08) 27px,
+      rgba(192,96,200,0.08) 28px
+    );
+  pointer-events: none;
+}
+
+/* =====================================================
+   SCROLLBAR
+   ===================================================== */
+
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--col-bench); }
+::-webkit-scrollbar-thumb {
+  background: var(--col-crt-dim);
+  border: 2px solid var(--col-bench);
+}
+::-webkit-scrollbar-thumb:hover { background: var(--col-crt); }
+
+/* =====================================================
+   LAYOUT HELPERS
+   ===================================================== */
+
+.page-wrapper {
+  min-height: calc(100vh - var(--nav-h));
+  padding-top: var(--nav-h);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+}
+
+/* =====================================================
+   PIXEL BUTTON
+   ===================================================== */
+
+.btn-pixel {
+  font-family: var(--font-pixel);
+  font-size: 8px;
+  padding: 10px 16px;
+  background: var(--col-bench);
+  color: var(--col-crt);
+  border: none;
+  cursor: pointer;
+  letter-spacing: 1px;
+  position: relative;
+  box-shadow:
+    inset -4px -4px 0 0 rgba(0,0,0,0.4),
+    inset 4px 4px 0 0 rgba(255,255,255,0.05),
+    4px 4px 0 0 rgba(0,0,0,0.6);
+  transition: transform 0.05s, box-shadow 0.05s;
+  outline: 2px solid var(--col-crt-dim);
+}
+
+.btn-pixel:hover {
+  color: var(--col-neon);
+  outline-color: var(--col-neon);
+  box-shadow:
+    inset -4px -4px 0 0 rgba(0,0,0,0.4),
+    inset 4px 4px 0 0 rgba(255,255,255,0.05),
+    4px 4px 0 0 rgba(0,0,0,0.6),
+    0 0 12px rgba(0,255,136,0.25);
+  text-shadow: 0 0 8px rgba(0,255,136,0.5);
+}
+
+.btn-pixel:active {
+  transform: translate(2px, 2px);
+  box-shadow:
+    inset -2px -2px 0 0 rgba(0,0,0,0.4),
+    inset 2px 2px 0 0 rgba(255,255,255,0.05),
+    2px 2px 0 0 rgba(0,0,0,0.6);
+}
+
+/* =====================================================
+   PROGRESS / GAUGE BARS
+   ===================================================== */
+
+.gauge-track {
+  height: 16px;
+  background: var(--col-bg);
+  border: 2px solid var(--col-pixel-border);
+  position: relative;
+  overflow: hidden;
+}
+
+.gauge-fill {
+  height: 100%;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--col-crt) 0px,
+    var(--col-crt) 10px,
+    var(--col-crt-dim) 10px,
+    var(--col-crt-dim) 12px
+  );
+  transition: width 0.6s ease-out;
+}
+
+.gauge-fill--amber {
+  background: repeating-linear-gradient(
+    90deg,
+    var(--col-amber) 0px,
+    var(--col-amber) 10px,
+    var(--col-amber-dim) 10px,
+    var(--col-amber-dim) 12px
+  );
+}
