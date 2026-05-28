@@ -17,12 +17,19 @@
 
   // ── SCREENSAVER ────────────────────────────────
   let ssActive = $state(false);
-  let ssX = $state(60);
-  let ssY = $state(60);
+  let ssX  = $state(60);
+  let ssY  = $state(60);
   let ssDX = $state(1.4);
   let ssDY = $state(1.1);
+  let ssBg = $state('#180f3a');
   let ssFrame: ReturnType<typeof requestAnimationFrame>;
   let idleTimer: ReturnType<typeof setTimeout>;
+
+  const SS_COLORS = [
+    '#180f3a', '#241965', '#653993', '#9F4094',
+    '#B73D6E', '#c060c8', '#F19406', '#007a40',
+    '#0a1628', '#1a2840', '#303048', '#2a1a3a',
+  ];
 
   // ── AFTER-HOURS ────────────────────────────────
   let afterHours = $state(false);
@@ -46,14 +53,21 @@
     idleTimer = setTimeout(() => { ssActive = true; startSS(); }, 60000);
   }
 
+  function nextSsColor() {
+    const others = SS_COLORS.filter(c => c !== ssBg);
+    ssBg = others[Math.floor(Math.random() * others.length)];
+  }
+
   function startSS() {
     function frame() {
       ssX += ssDX;
       ssY += ssDY;
-      const maxX = window.innerWidth  - 160;
-      const maxY = window.innerHeight - 120;
-      if (ssX <= 0 || ssX >= maxX) ssDX *= -1;
-      if (ssY <= 0 || ssY >= maxY) ssDY *= -1;
+      const maxX = window.innerWidth  - 80;
+      const maxY = window.innerHeight - 80;
+      let bounced = false;
+      if (ssX <= 0 || ssX >= maxX) { ssDX *= -1; bounced = true; }
+      if (ssY <= 0 || ssY >= maxY) { ssDY *= -1; bounced = true; }
+      if (bounced) nextSsColor();
       ssX = Math.max(0, Math.min(ssX, maxX));
       ssY = Math.max(0, Math.min(ssY, maxY));
       ssFrame = requestAnimationFrame(frame);
@@ -223,8 +237,8 @@
 {#if ssActive}
   <div class="ss-overlay" onclick={dismissSS} role="button" tabindex="0" aria-label="Click to dismiss screensaver" onkeydown={(e) => e.key === 'Enter' && dismissSS()}>
     <div class="ss-cat" style="left:{ssX}px; top:{ssY}px;">
-      <svg viewBox="0 0 42 42" width="80" height="80" shape-rendering="crispEdges" style="image-rendering:pixelated;">
-        <rect width="42" height="42" fill="#180f3a"/>
+      <svg viewBox="0 0 42 42" width="80" height="80" shape-rendering="crispEdges" style="image-rendering:pixelated; transition: background 0.15s;">
+        <rect width="42" height="42" fill={ssBg}/>
         <!-- hat amber -->
         <rect x="15" y="0"  width="12" height="3"  fill="#F19406"/>
         <rect x="15" y="3"  width="12" height="3"  fill="#F19406"/>
