@@ -5,8 +5,6 @@ tags: ["meta", "hello"]
 excerpt: "The basement is open. Mind the cables."
 ---
 
-# Welcome to the Workshop
-
 The basement is officially open for business.
 
 This is where I'll be dumping thoughts, half-baked ideas, project logs, and the occasional unhinged observation about the universe. No algorithm, no engagement metrics, no hot takes optimized for clicks — just a nerd with too many hobbies and a website to fill.

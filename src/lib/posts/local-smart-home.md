@@ -5,8 +5,6 @@ tags: ["iot", "mqtt", "ble", "home-automation", "self-hosting"]
 excerpt: "Full home automation with AC control, power monitoring, temp and humidity sensors — all running locally, all yours, nothing phoning home."
 ---
 
-# Building a Local-Only Smart Home (No Cloud Required)
-
 Most smart home products want to be your friend. They want to be in the cloud. They want a subscription. They want to know when you're home, how warm you like it, and what time you go to bed.
 
 No thanks.

@@ -68,6 +68,17 @@
     // After-hours status text
     const h = new Date().getHours();
     afterHours = h >= 23 || h < 4;
+
+    // '/' key → focus search
+    const onSlash = (e: KeyboardEvent) => {
+      const tag = (e.target as HTMLElement).tagName;
+      if (e.key === '/' && tag !== 'INPUT' && tag !== 'TEXTAREA') {
+        e.preventDefault();
+        window.location.href = '/search';
+      }
+    };
+    window.addEventListener('keydown', onSlash);
+    return () => window.removeEventListener('keydown', onSlash);
   });
 
   const navItems = [
@@ -90,7 +101,7 @@
   <meta property="og:type"        content="website" />
   <meta property="og:title"       content="Senor Gatos — The Workshop" />
   <meta property="og:description" content="Basement engineer. Maker of things." />
-  <meta property="og:image"       content="https://senorgatos.com/og-default.png" />
+  <meta property="og:image"       content="https://senorgatos.com/og-default.svg" />
   <meta name="twitter:card"       content="summary_large_image" />
   <meta name="twitter:title"      content="Senor Gatos — The Workshop" />
   <meta name="twitter:description" content="Basement engineer. Maker of things." />
@@ -178,6 +189,10 @@
         </li>
       {/each}
     </ul>
+
+    <a href="/search" class="nav__search" aria-label="Search (press /)" title="Search — press / anywhere">
+      <span aria-hidden="true">⌕</span>
+    </a>
 
     <div class="nav__status">
       <span class="led led--amber" style="animation-delay:0.7s"></span>
@@ -305,6 +320,22 @@
     color: var(--col-neon);
     border-color: var(--col-neon-dim);
     background: rgba(0, 255, 136, 0.06);
+  }
+
+  .nav__search {
+    font-size: 20px;
+    color: var(--col-paper-dark);
+    text-decoration: none;
+    padding: 4px 8px;
+    border: 2px solid transparent;
+    transition: color 0.1s, border-color 0.1s;
+    flex-shrink: 0;
+  }
+
+  .nav__search:hover {
+    color: var(--col-neon);
+    border-color: var(--col-neon-dim);
+    text-shadow: 0 0 8px rgba(0,255,136,0.4);
   }
 
   .nav__status {

@@ -5,11 +5,27 @@
   onMount(() => collect('blueprint'));
 
   const statusConfig = {
-    'complete':    { label: 'COMPLETE',     stamp: 'stamp--crt' },
-    'in-progress': { label: 'IN PROGRESS',  stamp: 'stamp--amber' },
-    'shelved':     { label: 'SHELVED',      stamp: 'stamp--red' },
-    'planning':    { label: 'PLANNING',     stamp: 'stamp--blue' },
+    'complete':    { label: 'COMPLETE',    stamp: 'stamp--crt'   },
+    'in-progress': { label: 'IN PROGRESS', stamp: 'stamp--amber' },
+    'planning':    { label: 'PLANNING',    stamp: 'stamp--blue'  },
+    'shelved':     { label: 'SHELVED',     stamp: 'stamp--red'   },
+    'obsolete':    { label: 'OBSOLETE',    stamp: 'stamp--red'   },
   };
+
+  type Status = keyof typeof statusConfig | 'all';
+  let activeFilter = $state<Status>('all');
+
+  const filtered = $derived(
+    activeFilter === 'all'
+      ? projects
+      : projects.filter(p => p.status === activeFilter)
+  );
+
+  const counts = $derived(
+    Object.fromEntries(
+      Object.keys(statusConfig).map(s => [s, projects.filter(p => p.status === s).length])
+    )
+  );
 </script>
 
 <svelte:head>
@@ -26,6 +42,24 @@
     </p>
   </header>
 
+  <!-- Status filters -->
+  <div class="filters">
+    <button class="filter-btn" class:filter-btn--active={activeFilter === 'all'} onclick={() => activeFilter = 'all'}>
+      ALL <span class="filter-count">{projects.length}</span>
+    </button>
+    {#each Object.entries(statusConfig) as [key, cfg]}
+      {#if counts[key] > 0}
+        <button
+          class="filter-btn filter-btn--{key}"
+          class:filter-btn--active={activeFilter === key}
+          onclick={() => activeFilter = activeFilter === key ? 'all' : key as Status}
+        >
+          {cfg.label} <span class="filter-count">{counts[key]}</span>
+        </button>
+      {/if}
+    {/each}
+  </div>
+
   <!-- Wooden shelf -->
   <div class="shelf" aria-label="Projects shelf">
     <div class="shelf__bracket shelf__bracket--left" aria-hidden="true"></div>
@@ -34,7 +68,7 @@
     <div class="shelf__board" aria-hidden="true"></div>
 
     <div class="shelf__items">
-      {#each projects as project}
+      {#each filtered as project}
         {@const status = statusConfig[project.status]}
         <div class="shelf-item pixel-box" data-status={project.status}>
           <div class="shelf-item__placard">
@@ -73,9 +107,47 @@
 
 <style>
   .page-header {
-    margin-bottom: 3rem;
+    margin-bottom: 2rem;
     border-bottom: 4px solid var(--col-pixel-border);
     padding-bottom: 1.5rem;
+  }
+
+  /* ── FILTERS ───────────────────────────────── */
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 2rem;
+  }
+
+  .filter-btn {
+    font-family: var(--font-pixel);
+    font-size: 7px;
+    padding: 6px 12px;
+    background: var(--col-bench);
+    border: 2px solid var(--col-pixel-border);
+    color: var(--col-paper-dark);
+    cursor: pointer;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: color 0.1s, border-color 0.1s;
+  }
+
+  .filter-btn:hover { color: var(--col-neon); border-color: var(--col-neon); }
+
+  .filter-btn--active          { color: var(--col-paper); border-color: var(--col-paper); background: rgba(255,255,255,0.05); }
+  .filter-btn--in-progress.filter-btn--active { color: var(--col-amber); border-color: var(--col-amber); }
+  .filter-btn--complete.filter-btn--active    { color: var(--col-crt);   border-color: var(--col-crt); }
+  .filter-btn--planning.filter-btn--active    { color: var(--col-blue);  border-color: var(--col-blue); }
+  .filter-btn--shelved.filter-btn--active,
+  .filter-btn--obsolete.filter-btn--active    { color: var(--col-red);   border-color: var(--col-red); }
+
+  .filter-count {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    opacity: 0.6;
   }
 
   /* ── SHELF ─────────────────────────────────── */
@@ -149,6 +221,7 @@
   .shelf-item[data-status='in-progress'] { border-top: 4px solid var(--col-amber); }
   .shelf-item[data-status='shelved']     { border-top: 4px solid var(--col-red); }
   .shelf-item[data-status='planning']    { border-top: 4px solid var(--col-blue); }
+  .shelf-item[data-status='obsolete']    { border-top: 4px solid var(--col-red); opacity: 0.7; }
 
   .shelf-item--empty {
     display: flex;

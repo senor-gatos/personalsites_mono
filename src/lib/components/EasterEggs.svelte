@@ -50,7 +50,7 @@
   function resetIdle() {
     clearTimeout(idleTimer);
     if (ssActive) return;
-    idleTimer = setTimeout(() => { ssActive = true; startSS(); }, 60000);
+    idleTimer = setTimeout(() => { ssActive = true; startSS(); }, 180000);
   }
 
   function nextSsColor() {

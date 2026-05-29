@@ -1,0 +1,24 @@
+/* TEAM */
+Name: Senor Gatos
+Location: The Basement, Earth
+Contact: senorgatos.com/about
+
+/* THANKS */
+AI assist: Claude (Anthropic) — claude.ai
+
+/* SITE */
+Last update: 2026-05-28
+Language: English
+Doctype: HTML5
+Framework: SvelteKit
+Content: MDsveX
+Fonts: Press Start 2P, VT323, Crimson Pro (Google Fonts)
+
+/* STANDARDS */
+Built with: SvelteKit, TypeScript, CSS
+Deployed: Cloudflare Pages (eventually)
+
+/* NOTE */
+This site was built in a basement.
+There are easter eggs.
+The duck is draggable.

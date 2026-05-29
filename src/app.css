@@ -252,15 +252,105 @@ p { margin-bottom: 1em; }
   padding: 1px 6px;
 }
 
+/* ── CODE BLOCKS ── */
 .content-area pre {
-  background: #110830;
-  color: var(--col-neon);
-  font-family: var(--font-mono);
-  font-size: 1.1em;
-  padding: 1.5rem;
+  background: #0d0b1e;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.82rem;
+  line-height: 1.65;
+  padding: 0;
+  margin: 1.75rem 0;
+  border: 2px solid var(--col-pixel-border);
+  border-top: none;
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+}
+
+/* Fake window bar at top */
+.content-area pre::before {
+  content: '● ● ●';
+  display: block;
+  background: #1a1530;
+  color: var(--col-pixel-border);
+  font-family: monospace;
+  font-size: 10px;
+  letter-spacing: 3px;
+  padding: 6px 12px;
+  border-bottom: 2px solid var(--col-pixel-border);
+  pointer-events: none;
+}
+
+.content-area pre code {
+  display: block;
+  padding: 1.25rem 1.5rem;
   overflow-x: auto;
+  color: #d4ccf0;      /* soft lavender-white — much easier to read than neon */
+  background: none;
+  font-size: inherit;
+  font-family: inherit;
+}
+
+/* Inline code — unchanged except smaller */
+.content-area code {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.82em;
+  background: rgba(192,96,200,0.15);
+  color: #e8b4f8;
+  padding: 2px 6px;
+  border: 1px solid rgba(192,96,200,0.25);
+}
+
+/* ── TABLES ── */
+.content-area table {
+  width: 100%;
+  border-collapse: collapse;
   margin: 1.5rem 0;
-  border-left: 4px solid var(--col-neon);
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  position: relative;
+  z-index: 1;
+  overflow-x: auto;
+  display: block;
+}
+
+.content-area thead {
+  background: #110830;
+  border-bottom: 3px solid var(--col-neon);
+}
+
+.content-area th {
+  font-family: var(--font-pixel);
+  font-size: 7px;
+  color: var(--col-neon);
+  padding: 8px 12px;
+  text-align: left;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+.content-area td {
+  padding: 7px 12px;
+  color: #f0e0ff;
+  border-bottom: 1px solid rgba(192,96,200,0.12);
+  line-height: 1.5;
+  vertical-align: top;
+}
+
+.content-area tr:nth-child(even) td {
+  background: rgba(255,255,255,0.03);
+}
+
+.content-area tr:hover td {
+  background: rgba(0,255,136,0.05);
+}
+
+/* first column often acts as a label — highlight it */
+.content-area td:first-child {
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  color: var(--col-amber);
+  white-space: nowrap;
 }
 
 /* Subtle grid lines on content area */

@@ -45,3 +45,59 @@ export const collection: MediaItem[] = [
 ];
 
 export const ALL_GENRES = [...new Set(collection.flatMap(m => m.genres))].sort();
+
+// ── BOARD GAMES ───────────────────────────────────────────────────────────────
+export interface BoardGame {
+  id: string;
+  title: string;
+  minPlayers: number;
+  maxPlayers: number;
+  playTime: string;      // e.g. "30–60 min"
+  genres: string[];
+  status: 'owned' | 'wishlist';
+  note?: string;
+}
+
+export const boardGames: BoardGame[] = [
+  // ── Add your board games here ──
+  { id: 'placeholder-bg', title: 'Your Favourite Game', minPlayers: 2, maxPlayers: 4, playTime: '60 min', genres: ['strategy'], status: 'owned' },
+];
+
+// ── BOOKS ─────────────────────────────────────────────────────────────────────
+export type BookType = 'fiction' | 'non-fiction' | 'textbook' | 'graphic-novel' | 'reference';
+export type BookStatus = 'read' | 'reading' | 'unread' | 'wishlist';
+
+export interface Book {
+  id: string;
+  title: string;
+  author: string;
+  year?: number;
+  type: BookType;
+  genres: string[];
+  status: BookStatus;
+  note?: string;
+}
+
+export const books: Book[] = [
+  // ── Add your books here ──
+  { id: 'placeholder-book', title: 'Your Favourite Book', author: 'Author Name', year: 2024, type: 'fiction', genres: ['sci-fi'], status: 'read' },
+];
+
+// ── LEGO ──────────────────────────────────────────────────────────────────────
+export interface LegoSet {
+  id: string;
+  name: string;
+  setNumber: string;
+  theme: string;
+  pieces: number;
+  year?: number;
+  status: 'owned' | 'wishlist';
+  built: boolean;
+  displayed: boolean;
+  note?: string;
+}
+
+export const lego: LegoSet[] = [
+  // ── Add your Lego sets here ──
+  { id: 'placeholder-lego', name: 'Your Favourite Set', setNumber: '00000', theme: 'Theme', pieces: 1000, year: 2024, status: 'owned', built: true, displayed: true },
+];

@@ -145,6 +145,14 @@
       </ul>
     </div>
 
+    <!-- Uses / setup link -->
+    <a href="/uses" class="uses-card" style="--pin:{pinColors[0]}">
+      <div class="uses-card__pin" aria-hidden="true"></div>
+      <h2>The Setup</h2>
+      <p>Hardware, software, home lab, and bench tools — what's actually on the desk.</p>
+      <span class="uses-card__cta mono">view uses →</span>
+    </a>
+
     <!-- Red-string note -->
     <div class="redstring-note" aria-hidden="true">
       <span class="mono" style="font-size:14px; color:var(--col-red); transform:rotate(-3deg); display:block;">
@@ -353,6 +361,63 @@
     color: #2a1a0a;
     margin-bottom: 0.75rem;
   }
+
+  /* Uses card — orange sticky note */
+  .uses-card {
+    background: #ffd090;
+    color: var(--col-ink);
+    padding: 1.25rem 1.5rem;
+    border: 2px solid rgba(0,0,0,0.15);
+    box-shadow: 4px 4px 0 rgba(0,0,0,0.3);
+    position: relative;
+    z-index: 1;
+    max-width: 220px;
+    transform: rotate(-1deg);
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+
+  .uses-card:hover {
+    transform: rotate(0deg) translateY(-3px);
+    box-shadow: 6px 6px 0 rgba(0,0,0,0.3);
+  }
+
+  .uses-card__pin {
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 16px;
+    height: 16px;
+    background: var(--pin);
+    border: 2px solid rgba(0,0,0,0.3);
+    box-shadow: 1px 2px 3px rgba(0,0,0,0.4);
+  }
+
+  .uses-card h2 {
+    font-size: 9px;
+    color: var(--col-ink);
+    margin: 0;
+  }
+
+  .uses-card p {
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    color: #3a2010;
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  .uses-card__cta {
+    font-size: 13px;
+    color: #8a5010;
+    margin-top: 0.25rem;
+  }
+
+  .uses-card:hover .uses-card__cta { color: #3a1a08; }
 
   .note-card p:last-child { margin-bottom: 0; }
 

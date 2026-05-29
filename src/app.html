@@ -3,10 +3,28 @@
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="sitemap" type="application/xml" href="/sitemap.xml" />
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
 		<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323:wght@400&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
 		%sveltekit.head%
+
+		<!--
+		  ANALYTICS — uncomment ONE of these when ready:
+
+		  OPTION A: Umami (self-hosted on your homelab — recommended)
+		  1. Run Umami in Docker: https://umami.is/docs/install
+		  2. Add your site, get the tracking ID
+		  3. Replace YOUR_UMAMI_URL and YOUR_WEBSITE_ID below
+
+		  <script defer src="https://YOUR_UMAMI_URL/script.js" data-website-id="YOUR_WEBSITE_ID"></script>
+
+		  OPTION B: Plausible cloud (plausible.io — paid, privacy-first)
+		  1. Sign up at plausible.io, add senorgatos.com
+		  2. Uncomment:
+
+		  <script defer data-domain="senorgatos.com" src="https://plausible.io/js/script.js"></script>
+		-->
 	</head>
 	<body data-sveltekit-preload-data="hover">
 		<div style="display: contents">%sveltekit.body%</div>

@@ -5,8 +5,6 @@ tags: ["self-hosting", "jellyfin", "homelab", "linux"]
 excerpt: "No subscriptions. No algorithms. No content disappearing overnight. Just the library, running in the basement."
 ---
 
-# Building My Home Media Server with Jellyfin
-
 I have a DVD collection. A real one — physical discs, cases, the whole thing. And for a long time it just sat on a shelf looking good while I paid for three streaming services and still couldn't find anything to watch.
 
 That changes now.

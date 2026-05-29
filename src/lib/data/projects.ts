@@ -2,7 +2,7 @@ export interface Project {
   id: string;
   title: string;
   desc: string;
-  status: 'complete' | 'in-progress' | 'shelved' | 'planning';
+  status: 'complete' | 'in-progress' | 'shelved' | 'planning' | 'obsolete';
   tags: string[];
   year: number;
   link?: string;
@@ -79,6 +79,14 @@ export const projects: Project[] = [
     desc: 'Custom home automation stack — AC control & power monitoring over WiFi, temp/humidity over BLE, MQTT broker, and a task manager for orchestrating everything. No cloud. No subscriptions. No data leaving the house.',
     status: 'in-progress',
     tags: ['iot', 'mqtt', 'ble', 'wifi', 'home-automation', 'linux'],
+    year: 2026,
+  },
+  {
+    id: 'kid-computer',
+    title: 'Kid-Friendly RPi Computer',
+    desc: 'A Raspberry Pi based computer designed for 3–6 year olds. Durable, simple, safe — no ads, no dark patterns, no infinite scroll. Just games, drawing, and learning.',
+    status: 'in-progress',
+    tags: ['raspberry-pi', 'hardware', 'linux', 'kids', 'education'],
     year: 2026,
   },
   {
