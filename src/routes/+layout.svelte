@@ -14,6 +14,7 @@
   let footerSecret = $state(false);
   let footerTimer: ReturnType<typeof setTimeout>;
   let afterHours = $state(false);
+  let mobileMenuOpen = $state(false);
 
   function spinCat(e: MouseEvent) {
     e.preventDefault();
@@ -75,6 +76,9 @@
       if (e.key === '/' && tag !== 'INPUT' && tag !== 'TEXTAREA') {
         e.preventDefault();
         window.location.href = '/search';
+      }
+      if (e.key === 'Escape' && mobileMenuOpen) {
+        mobileMenuOpen = false;
       }
     };
     window.addEventListener('keydown', onSlash);
@@ -175,7 +179,7 @@
       ></span>
     </a>
 
-    <ul class="nav__links">
+    <ul class="nav__links" class:nav__links--open={mobileMenuOpen}>
       {#each navItems as item}
         <li>
           <a
@@ -183,12 +187,22 @@
             class="nav__link"
             class:nav__link--active={page.url.pathname === item.href ||
               (item.href !== '/' && page.url.pathname.startsWith(item.href))}
+            onclick={() => mobileMenuOpen = false}
           >
             {item.label}
           </a>
         </li>
       {/each}
     </ul>
+
+    <button
+      class="nav__toggle"
+      aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
+      aria-expanded={mobileMenuOpen}
+      onclick={() => mobileMenuOpen = !mobileMenuOpen}
+    >
+      <span aria-hidden="true">{mobileMenuOpen ? '✕' : '☰'}</span>
+    </button>
 
     <a href="/search" class="nav__search" aria-label="Search (press /)" title="Search — press / anywhere">
       <span aria-hidden="true">⌕</span>
@@ -322,6 +336,25 @@
     background: rgba(0, 255, 136, 0.06);
   }
 
+  .nav__toggle {
+    display: none;
+    font-family: var(--font-pixel);
+    font-size: 16px;
+    line-height: 1;
+    color: var(--col-paper-dark);
+    background: transparent;
+    border: 2px solid transparent;
+    padding: 4px 8px;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: color 0.1s, border-color 0.1s;
+  }
+
+  .nav__toggle:hover {
+    color: var(--col-neon);
+    border-color: var(--col-neon-dim);
+  }
+
   .nav__search {
     font-size: 20px;
     color: var(--col-paper-dark);
@@ -446,7 +479,53 @@
 
   @media (max-width: 700px) {
     .nav__status { display: none; }
-    .nav__link { font-size: 7px; padding: 6px 7px; }
     .nav__logo-text { font-size: 8px; }
+
+    .nav__toggle {
+      display: block;
+      margin-left: auto;
+    }
+
+    .nav__links {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      flex: none;
+      flex-direction: column;
+      gap: 0;
+      background: var(--col-wood-mid);
+      border-bottom: 4px solid var(--col-pixel-border);
+      box-shadow: 0 4px 0 0 rgba(0,0,0,0.4);
+      max-height: calc(100vh - var(--nav-h));
+      overflow-y: auto;
+    }
+
+    .nav__links--open {
+      display: flex;
+    }
+
+    .nav__links li {
+      width: 100%;
+    }
+
+    .nav__link {
+      display: block;
+      font-size: 10px;
+      padding: 12px 1.5rem;
+      border: none;
+      border-bottom: 2px solid rgba(0,0,0,0.25);
+    }
+
+    .footer__inner {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.75rem;
+    }
+
+    .social-links {
+      flex-wrap: wrap;
+    }
   }
 </style>
