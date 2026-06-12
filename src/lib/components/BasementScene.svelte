@@ -126,6 +126,34 @@
     { x: 854, w: 14, h: 60, c: '#4060c0', hi: '#5878d8' },
     { x: 870, w: 10, h: 48, c: '#c05030', hi: '#d86848' },
   ];
+
+  // ── WINDOW: distant skyline + rain (deterministic — no Math.random, SSR-safe)
+  const cityBuildings = [
+    { x: 2,   w: 20, h: 36, c: '#1c1438' },
+    { x: 24,  w: 16, h: 54, c: '#241b46' },
+    { x: 42,  w: 22, h: 28, c: '#181030' },
+    { x: 66,  w: 18, h: 62, c: '#2a2050' },
+    { x: 86,  w: 24, h: 40, c: '#1c1438' },
+    { x: 112, w: 16, h: 58, c: '#241b46' },
+    { x: 130, w: 20, h: 32, c: '#181030' },
+    { x: 152, w: 18, h: 48, c: '#2a2050' },
+  ].map((b, bi) => {
+    const cols = Math.floor(b.w / 6);
+    const rows = Math.floor(b.h / 9);
+    const windows = Array.from({ length: cols * rows }, (_, wi) => ({
+      x: 2 + (wi % cols) * 6,
+      y: 3 + Math.floor(wi / cols) * 9,
+      lit: (bi * 13 + wi * 7) % 5 === 0,
+    }));
+    return { ...b, windows };
+  });
+
+  const rainDrops = Array.from({ length: 30 }, (_, i) => ({
+    left: (i * 37) % 100,
+    len: 10 + (i % 4) * 4,
+    dur: 1.6 + (i % 5) * 0.4,
+    delay: (i * 0.137) % 3.6,
+  }));
 </script>
 
 <!-- ── UPPER SHELF ────────────────────────────────────────────────────────── -->
@@ -267,6 +295,53 @@
     <path d="M 480 0 C 475 45 490 70 485 120" stroke="#e0a020" stroke-width="2" fill="none"/>
     <rect x="481" y="116" width="8" height="6" fill="#c08818"/>
   </svg>
+</div>
+
+<!-- ── WINDOW (rain + distant skyline) ───────────────────────────────────── -->
+<div class="window" aria-hidden="true">
+  <div class="window__glass">
+    <svg class="window__skyline" viewBox="0 0 170 90" preserveAspectRatio="xMidYMax meet">
+      <!-- a few distant stars -->
+      <rect x="10"  y="6"  width="2" height="2" fill="#ffffff" opacity="0.6"/>
+      <rect x="60"  y="3"  width="2" height="2" fill="#ffffff" opacity="0.4"/>
+      <rect x="120" y="8"  width="2" height="2" fill="#ffffff" opacity="0.5"/>
+      <rect x="150" y="4"  width="2" height="2" fill="#ffffff" opacity="0.35"/>
+      <rect x="90"  y="14" width="2" height="2" fill="#ffffff" opacity="0.3"/>
+
+      <!-- city silhouette -->
+      {#each cityBuildings as b}
+        <rect x={b.x} y={90 - b.h} width={b.w} height={b.h} fill={b.c} />
+        {#each b.windows as w}
+          <rect
+            x={b.x + w.x} y={90 - b.h + w.y}
+            width="3" height="4"
+            fill={w.lit ? '#ffcf6b' : '#0c0a1e'}
+            opacity={w.lit ? 0.85 : 0.5}
+          />
+        {/each}
+      {/each}
+    </svg>
+
+    <!-- falling rain -->
+    <div class="window__rain">
+      {#each rainDrops as r}
+        <span
+          class="raindrop"
+          style="left:{r.left}%; height:{r.len}px; animation-duration:{r.dur}s; animation-delay:-{r.delay}s;"
+        ></span>
+      {/each}
+    </div>
+
+    <!-- glass sheen -->
+    <div class="window__sheen" aria-hidden="true"></div>
+  </div>
+
+  <!-- pixel mullions -->
+  <div class="window__mullion window__mullion--v"></div>
+  <div class="window__mullion window__mullion--h"></div>
+
+  <!-- sill -->
+  <div class="window__sill" aria-hidden="true"></div>
 </div>
 
 <!-- ── LOWER SHELF ────────────────────────────────────────────────────────── -->
@@ -941,6 +1016,105 @@
     25%  { transform: rotate(25deg)  translate(8px,  0px);  }
     55%  { transform: rotate(85deg)  translate(20px, 10px); }
     100% { transform: rotate(90deg)  translate(30px, 160px); opacity: 0; }
+  }
+
+  /* ── WINDOW (rain + skyline) ─── */
+  .window {
+    position: absolute;
+    top: 2%;
+    right: 4%;
+    width: clamp(70px, 8vw, 110px);
+    height: clamp(80px, 9vw, 110px);
+    background: #100c22;
+    border: 5px solid #2a2050;
+    box-shadow:
+      0 0 0 3px #181030,
+      6px 6px 0 0 rgba(0,0,0,0.5);
+    z-index: 1;
+  }
+
+  .window__glass {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    background: linear-gradient(to bottom, #0a0618 0%, #160f30 55%, #2a1a48 100%);
+  }
+
+  .window__skyline {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 65%;
+    display: block;
+    image-rendering: pixelated;
+  }
+
+  .window__rain {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .raindrop {
+    position: absolute;
+    top: -24px;
+    width: 1px;
+    background: linear-gradient(to bottom, transparent, rgba(190, 210, 255, 0.55));
+    animation-name: rain-fall;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+  }
+
+  @keyframes rain-fall {
+    0%   { transform: translate(0, 0); opacity: 0; }
+    8%   { opacity: 0.7; }
+    100% { transform: translate(-10px, 130px); opacity: 0.15; }
+  }
+
+  .window__sheen {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      115deg,
+      rgba(255,255,255,0.06) 0%,
+      transparent 30%,
+      transparent 75%,
+      rgba(255,255,255,0.03) 100%
+    );
+    pointer-events: none;
+  }
+
+  .window__mullion {
+    position: absolute;
+    background: #2a2050;
+    box-shadow: 0 0 0 1px rgba(0,0,0,0.3);
+    pointer-events: none;
+  }
+
+  .window__mullion--v {
+    top: 0; bottom: 0;
+    left: 50%;
+    width: 3px;
+    transform: translateX(-50%);
+  }
+
+  .window__mullion--h {
+    left: 0; right: 0;
+    top: 50%;
+    height: 3px;
+    transform: translateY(-50%);
+  }
+
+  .window__sill {
+    position: absolute;
+    left: -5px;
+    right: -5px;
+    bottom: -8px;
+    height: 8px;
+    background: #3a2c5e;
+    box-shadow: 0 3px 0 0 rgba(0,0,0,0.4);
   }
 
   /* ── COFFEE SPLAT ─── */
