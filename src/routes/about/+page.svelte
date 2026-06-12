@@ -99,10 +99,9 @@
       <h2>Interests</h2>
       <ul class="interest-list">
         <li>🚀 Space & astronomy</li>
-        <li>📖 Sci-fi literature</li>
+        <li>📖 Stories in any medium</li>
         <li>⚡ Electronics & microcontrollers</li>
-        <li>🕹️ Game development (perpetually)</li>
-        <li>🐱 Cats (obviously)</li>
+        <li>🕹️ Games - board or video</li>
         <li>🔧 Making things break in interesting ways</li>
       </ul>
     </div>
