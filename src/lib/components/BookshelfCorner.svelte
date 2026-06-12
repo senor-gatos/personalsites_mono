@@ -98,4 +98,11 @@
   :global(.book-hover:hover) {
     fill: rgba(255,255,255,0.12) !important;
   }
+
+  /* Hidden on mobile — takes up too much space over page content */
+  @media (max-width: 700px) {
+    .shelf-corner {
+      display: none;
+    }
+  }
 </style>

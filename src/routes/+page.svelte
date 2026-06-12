@@ -828,5 +828,10 @@
   @media (max-width: 600px) {
     .bench-items { grid-template-columns: 1fr 1fr; gap: 1rem; }
     .scene-monitor-area { width: 90vw; }
+
+    /* Extra headroom so the CRT monitor (anchored to the desk near the
+       bottom of the hero) doesn't get clipped by overflow:hidden at the
+       top of the scene on short mobile viewports. */
+    .scene-hero { height: calc(100vh - var(--nav-h) + 140px); }
   }
 </style>
