@@ -220,11 +220,11 @@
     </button>
 
     <nav class="social-links" aria-label="Social media links">
-      <a href="https://github.com/SenorGatos"            class="social-link social-link--github"     target="_blank" rel="noopener noreferrer">GITHUB</a>
-      <a href="https://discord.gg/yourinvite"            class="social-link social-link--discord"    target="_blank" rel="noopener noreferrer">DISCORD</a>
-      <a href="https://twitch.tv/yourname"               class="social-link social-link--twitch"     target="_blank" rel="noopener noreferrer">TWITCH</a>
-      <a href="https://bsky.app/profile/yourname.bsky.social" class="social-link social-link--bluesky" target="_blank" rel="noopener noreferrer">BLUESKY</a>
-      <a href="https://letterboxd.com/yourname"          class="social-link social-link--letterboxd" target="_blank" rel="noopener noreferrer">LBXD</a>
+      <a href="https://github.com/senor-gatos"            class="social-link social-link--github"     target="_blank" rel="noopener noreferrer">GITHUB</a>
+      <a href="https://discord.com/users/senor_gatos"     class="social-link social-link--discord"    target="_blank" rel="noopener noreferrer">DISCORD</a>
+      <a href="https://twitch.tv/senor_gatos"             class="social-link social-link--twitch"     target="_blank" rel="noopener noreferrer">TWITCH</a>
+      <a href="https://bsky.app/profile/senorgatos.bsky.social" class="social-link social-link--bluesky" target="_blank" rel="noopener noreferrer">BLUESKY</a>
+      <a href="https://boxd.it/3twTX"                     class="social-link social-link--letterboxd" target="_blank" rel="noopener noreferrer">LBXD</a>
     </nav>
 
     <span class="footer__leds">

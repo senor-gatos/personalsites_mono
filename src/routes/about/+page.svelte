@@ -65,7 +65,7 @@
           <div class="dossier__field">
             <span class="dossier__label mono">CONTACT</span>
             <span class="dossier__value">
-              <a href="mailto:your@email.com" style="color:var(--col-crt);">your@email.com</a>
+              <a href="mailto:senorgatosmail@gmail.com" style="color:var(--col-crt);">senorgatosmail@gmail.com</a>
             </span>
           </div>
           <div class="dossier__field">
@@ -113,33 +113,33 @@
       <h2>Find me elsewhere</h2>
       <ul class="social-list">
         <li>
-          <a href="https://github.com/SenorGatos" target="_blank" rel="noopener noreferrer" class="social-item social-item--github">
+          <a href="https://github.com/senor-gatos" target="_blank" rel="noopener noreferrer" class="social-item social-item--github">
             <span class="social-item__label">GITHUB</span>
-            <span class="social-item__handle">github.com/SenorGatos</span>
+            <span class="social-item__handle">github.com/senor-gatos</span>
           </a>
         </li>
         <li>
-          <a href="https://discord.gg/yourinvite" target="_blank" rel="noopener noreferrer" class="social-item social-item--discord">
+          <a href="https://discord.com/users/senor_gatos" target="_blank" rel="noopener noreferrer" class="social-item social-item--discord">
             <span class="social-item__label">DISCORD</span>
-            <span class="social-item__handle">discord.gg/yourinvite</span>
+            <span class="social-item__handle">senor_gatos</span>
           </a>
         </li>
         <li>
-          <a href="https://twitch.tv/yourname" target="_blank" rel="noopener noreferrer" class="social-item social-item--twitch">
+          <a href="https://twitch.tv/senor_gatos" target="_blank" rel="noopener noreferrer" class="social-item social-item--twitch">
             <span class="social-item__label">TWITCH</span>
-            <span class="social-item__handle">twitch.tv/yourname</span>
+            <span class="social-item__handle">twitch.tv/senor_gatos</span>
           </a>
         </li>
         <li>
-          <a href="https://bsky.app/profile/yourname.bsky.social" target="_blank" rel="noopener noreferrer" class="social-item social-item--bluesky">
+          <a href="https://bsky.app/profile/senorgatos.bsky.social" target="_blank" rel="noopener noreferrer" class="social-item social-item--bluesky">
             <span class="social-item__label">BLUESKY</span>
-            <span class="social-item__handle">@yourname.bsky.social</span>
+            <span class="social-item__handle">@senorgatos.bsky.social</span>
           </a>
         </li>
         <li>
-          <a href="https://letterboxd.com/yourname" target="_blank" rel="noopener noreferrer" class="social-item social-item--letterboxd">
+          <a href="https://boxd.it/3twTX" target="_blank" rel="noopener noreferrer" class="social-item social-item--letterboxd">
             <span class="social-item__label">LETTERBOXD</span>
-            <span class="social-item__handle">letterboxd.com/yourname</span>
+            <span class="social-item__handle">boxd.it/3twTX</span>
           </a>
         </li>
       </ul>
